@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tijana.nekretnineapp.activities.RealEstateActivity"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nekretnine_unesi_podatke"
+        android:textSize="40dp"/>
+
+    <EditText
+        android:id="@+id/real_estate_naziv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nekretnine_naziv"/>
+
+    <EditText
+        android:id="@+id/real_estate_opis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nekretnine_opis"/>
+
+    <EditText
+        android:id="@+id/real_estate_adresa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nekretnine_adresa"/>
+
+    <EditText
+        android:id="@+id/real_estate_broj_telefona"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nekretnine_broj_telefona"/>
+
+    <EditText
+        android:id="@+id/real_estate_kvadratura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nekretnine_kvadratura"/>
+
+    <EditText
+        android:id="@+id/real_estate_broj_soba"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nekretnine_broj_soba"/>
+
+    <EditText
+        android:id="@+id/real_estate_cena"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nekretnine_cena"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/button_choose_image"
+            android:onClick="onSelectImage"/>
+
+        <ImageView
+            android:id="@+id/real_estate_slika"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/button_save"
+            android:onClick="onClickOK"/>
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/button_cancel"
+            android:onClick="onClickCancel"/>
+
+    </LinearLayout>
+
+</LinearLayout>

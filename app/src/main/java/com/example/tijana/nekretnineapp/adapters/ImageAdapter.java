@@ -1,11 +1,19 @@
-package com.example.tijana.nekretnineapp;
+package com.example.tijana.nekretnineapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.example.tijana.nekretnineapp.db.DataBaseHelper;
+
+import java.io.File;
+import java.net.URI;
 
 /**
  * Created by tijana on 18.3.18..
@@ -33,6 +41,7 @@ public class ImageAdapter extends BaseAdapter {
 
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
+
             ImageView imageView;
             if (convertView == null) {
                 // if it's not recycled, initialize some attributes
@@ -44,12 +53,13 @@ public class ImageAdapter extends BaseAdapter {
                 imageView = (ImageView) convertView;
             }
 
-            imageView.setImageResource(mThumbIds[position]);
+            imageView.setImageURI(mThumbIds[position]);
             return imageView;
         }
 
         // references to our images
-       private Integer[] mThumbIds = {
+       private Uri[] mThumbIds = {
+
 //                R.drawable.sample_2, R.drawable.sample_3,
 //                R.drawable.sample_4, R.drawable.sample_5,
 //                R.drawable.sample_6, R.drawable.sample_7,

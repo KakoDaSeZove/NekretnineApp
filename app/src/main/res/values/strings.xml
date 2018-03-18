@@ -11,5 +11,13 @@
     <string name="nekretnine_kvadratura">Kvadratura:</string>
     <string name="nekretnine_broj_soba">Broj soba:</string>
     <string name="nekretnine_cena">Cena:</string>
+    <string name="nekretnine_unesi_podatke">Unesite podatke:</string>
 
+    <string name="action_add">Add</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+
+    <string name="button_choose_image">Choose Image</string>
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
 </resources>
