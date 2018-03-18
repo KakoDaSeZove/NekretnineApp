@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">NekretnineApp</string>
+
+    <string name="toolbar_name">Nekretnine</string>
+
+    <string name="nekretnine_indentifikator">Identifikator:</string>
+    <string name="nekretnine_naziv">Naziv:</string>
+    <string name="nekretnine_opis">Opis:</string>
+    <string name="nekretnine_adresa">Adresa:</string>
+    <string name="nekretnine_broj_telefona">Broj telefona:</string>
+    <string name="nekretnine_kvadratura">Kvadratura:</string>
+    <string name="nekretnine_broj_soba">Broj soba:</string>
+    <string name="nekretnine_cena">Cena:</string>
+
+</resources>
