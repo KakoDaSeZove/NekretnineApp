@@ -3,17 +3,14 @@ package com.example.tijana.nekretnineapp.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.example.tijana.nekretnineapp.db.DataBaseHelper;
-
 import java.io.File;
-import java.net.URI;
+import java.util.ArrayList;
 
 /**
  * Created by tijana on 18.3.18..
@@ -21,56 +18,49 @@ import java.net.URI;
 
 public class ImageAdapter extends BaseAdapter {
 
-        private Context mContext;
+    private Context mContext;
 
-        public ImageAdapter(Context c) {
-            mContext = c;
-        }
+    private ArrayList<String> images;
 
-        public int getCount() {
-            return mThumbIds.length;
-        }
-
-        public Object getItem(int position) {
-            return null;
-        }
-
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        // create a new ImageView for each item referenced by the Adapter
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ImageView imageView;
-            if (convertView == null) {
-                // if it's not recycled, initialize some attributes
-                imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 8);
-            } else {
-                imageView = (ImageView) convertView;
-            }
-
-            imageView.setImageURI(mThumbIds[position]);
-            return imageView;
-        }
-
-        // references to our images
-       private Uri[] mThumbIds = {
-
-//                R.drawable.sample_2, R.drawable.sample_3,
-//                R.drawable.sample_4, R.drawable.sample_5,
-//                R.drawable.sample_6, R.drawable.sample_7,
-//                R.drawable.sample_0, R.drawable.sample_1,
-//                R.drawable.sample_2, R.drawable.sample_3,
-//                R.drawable.sample_4, R.drawable.sample_5,
-//                R.drawable.sample_6, R.drawable.sample_7,
-//                R.drawable.sample_0, R.drawable.sample_1,
-//                R.drawable.sample_2, R.drawable.sample_3,
-//                R.drawable.sample_4, R.drawable.sample_5,
-//                R.drawable.sample_6, R.drawable.sample_7
-        };
+    public ImageAdapter(Context c, ArrayList<String> images) {
+        mContext = c;
+        this.images = images;
     }
+
+    public int getCount() {
+        return images.size();
+    }
+
+    public Object getItem(int position) {
+        return null;
+    }
+
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    // create a new ImageView for each item referenced by the Adapter
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        ImageView imageView;
+        if (convertView == null) {
+            // if it's not recycled, initialize some attributes
+            imageView = new ImageView(mContext);
+            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setPadding(8, 8, 8, 8);
+        } else {
+            imageView = (ImageView) convertView;
+        }
+        
+        File imgFile = new File(images.get(position));
+        if (imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            imageView.setImageBitmap(myBitmap);
+        }
+
+        return imageView;
+    }
+
+}
 

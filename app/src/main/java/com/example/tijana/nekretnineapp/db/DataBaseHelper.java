@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 
     public static String DATABASE_NAME = "mojeNekretnine.db";
-    public static int DATABASE_VERSION = 1;
+    public static int DATABASE_VERSION = 2;
 
     private Dao<RealEstate, Integer> mRealEstateDao = null;
     private Dao<Slike, Integer> mSlikeDao = null;

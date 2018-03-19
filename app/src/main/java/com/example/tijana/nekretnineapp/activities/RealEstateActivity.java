@@ -1,5 +1,7 @@
 package com.example.tijana.nekretnineapp.activities;
 
+import static com.example.tijana.nekretnineapp.activities.DetailActivity.EXTRA_NO;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +11,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,23 +27,27 @@ import com.j256.ormlite.dao.Dao;
 
 import java.io.File;
 import java.sql.SQLException;
-
-import static com.example.tijana.nekretnineapp.activities.DetailActivity.EXTRA_NO;
+import java.util.ArrayList;
 
 public class RealEstateActivity extends AppCompatActivity {
 
     private static final int SELECT_PICTURE = 1;
     private RealEstate nekretnina = null;
     private Slike slika = null;
+
     private ImageView preview;
     private String imagePath = null;
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
+    private ArrayList<String> allImagesPath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_real_estate);
+
+        allImagesPath = new ArrayList<>();
     }
 
     @Override
@@ -95,7 +101,8 @@ public class RealEstateActivity extends AppCompatActivity {
             nekretninaOpis.setText(nekretnina.getmOpis());
             EditText nekretninaAdresa = (EditText) findViewById(R.id.real_estate_adresa);
             nekretninaAdresa.setText(nekretnina.getmAdresa());
-            EditText nekretninaBrojTelefona = (EditText) findViewById(R.id.real_estate_broj_telefona);
+            EditText nekretninaBrojTelefona = (EditText) findViewById(
+                    R.id.real_estate_broj_telefona);
             nekretninaBrojTelefona.setText(nekretnina.getmBrojTelefona());
             EditText nekretninaKvadratura = (EditText) findViewById(R.id.real_estate_kvadratura);
             nekretninaKvadratura.setText(nekretnina.getmKvadratura());
@@ -168,22 +175,26 @@ public class RealEstateActivity extends AppCompatActivity {
             realEstateDB.setmBrojSoba(nekretninaBrojSoba.getText().toString());
             realEstateDB.setmCena(nekretninaCena.getText().toString());
 
-            Slike slikeDB = new Slike();
-            slikeDB.setmSlika(imagePath);
-
             try {
                 realEstateDao.create(realEstateDB);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            try {
-                slikeDao.create(slikeDB);
-            } catch (SQLException e) {
-                e.printStackTrace();
+            //! Create N images rows in database
+            //! Set path to each image
+            //! And set reference to realEstateDB
+            for (String image : allImagesPath) {
+                Slike slikeDB = new Slike();
+                slikeDB.setmSlika(image);
+                slikeDB.setmRealEstate(realEstateDB);
+
+                try {
+                    slikeDao.create(slikeDB);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-
-
         } else {
 //Ovo je edit nekretnina
 
@@ -196,19 +207,22 @@ public class RealEstateActivity extends AppCompatActivity {
             realEstateDB.setmBrojSoba(nekretninaBrojSoba.getText().toString());
             realEstateDB.setmCena(nekretninaCena.getText().toString());
 
-            Slike slikeDB = new Slike();
-            slikeDB.setmSlika(imagePath);
-
             try {
                 realEstateDao.update(realEstateDB);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            try {
-                slikeDao.update(slikeDB);
-            } catch (SQLException e) {
-                e.printStackTrace();
+            for (String image : allImagesPath) {
+                Slike slikeDB = new Slike();
+                slikeDB.setmSlika(imagePath);
+                slikeDB.setmRealEstate(realEstateDB);
+
+                try {
+                    slikeDao.create(slikeDB);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -243,6 +257,10 @@ public class RealEstateActivity extends AppCompatActivity {
 
                 imagePath = getRealPathFromURI(getApplicationContext(), selectedImageUri);
 
+                //! Add image to array list and save it on click OK
+                allImagesPath.add(imagePath);
+
+
                 //! onResume will be called after this function return
             }
         }
@@ -251,7 +269,8 @@ public class RealEstateActivity extends AppCompatActivity {
     public static String getRealPathFromURI(Context context, Uri uri) {
 
         String filePath = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && uri.getHost().contains("com.android.providers.media")) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && uri.getHost().contains(
+                "com.android.providers.media")) {
             // Image pick from recent
 
             String wholeID = DocumentsContract.getDocumentId(uri);
@@ -264,7 +283,8 @@ public class RealEstateActivity extends AppCompatActivity {
             // where id is equal to
             String sel = MediaStore.Images.Media._ID + "=?";
 
-            Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            Cursor cursor = context.getContentResolver().query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     column, sel, new String[]{id}, null);
 
             int columnIndex = cursor.getColumnIndex(column[0]);
@@ -277,7 +297,8 @@ public class RealEstateActivity extends AppCompatActivity {
         } else {
             // image pick from gallery
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = context.getContentResolver().query(uri, filePathColumn, null, null, null);
+            Cursor cursor = context.getContentResolver().query(uri, filePathColumn, null, null,
+                    null);
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
