@@ -5,6 +5,7 @@ import static com.example.tijana.nekretnineapp.activities.DetailActivity.EXTRA_N
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -32,6 +33,15 @@ import java.util.ArrayList;
 public class RealEstateActivity extends AppCompatActivity {
 
     private static final int SELECT_PICTURE = 1;
+    public static final String NEKRETNINE_NAZIV = "nekretnineNaziv";
+    public static final String NEKRETNINE_OPIS = "nekretnineOpis";
+    public static final String NEKRETNINE_ADRESA = "nekretnineAdresa";
+    public static final String NEKRETNINE_BROJ_TELEFONA = "nekretnineBrojTelefona";
+    public static final String NEKRETNINE_KVADRATURA = "nekretninekvadratura";
+    public static final String NEKRETNINE_BROJ_SOBA = "nekretnineBrojSoba";
+    public static final String NEKRETNINE_CENA = "nekretnineCena";
+
+
     private RealEstate nekretnina = null;
     private Slike slika = null;
 
@@ -48,6 +58,16 @@ public class RealEstateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_real_estate);
 
         allImagesPath = new ArrayList<>();
+
+        SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+        editor.remove(NEKRETNINE_NAZIV);
+        editor.remove(NEKRETNINE_OPIS);
+        editor.remove(NEKRETNINE_ADRESA);
+        editor.remove(NEKRETNINE_BROJ_TELEFONA);
+        editor.remove(NEKRETNINE_KVADRATURA);
+        editor.remove(NEKRETNINE_BROJ_SOBA);
+        editor.remove(NEKRETNINE_CENA);
+        editor.commit();
     }
 
     @Override
@@ -61,6 +81,52 @@ public class RealEstateActivity extends AppCompatActivity {
         }
 
         preview = (ImageView) findViewById(R.id.real_estate_slika);
+
+
+        EditText nekretninaNaziv = (EditText) findViewById(R.id.real_estate_naziv);
+        EditText nekretninaOpis = (EditText) findViewById(R.id.real_estate_opis);
+        EditText nekretninaAdresa = (EditText) findViewById(R.id.real_estate_adresa);
+        EditText nekretninaBrojTelefona = (EditText) findViewById(R.id.real_estate_broj_telefona);
+        EditText nekretninaKvadratura = (EditText) findViewById(R.id.real_estate_kvadratura);
+        EditText nekretninaBrojSoba = (EditText) findViewById(R.id.real_estate_broj_soba);
+        EditText nekretninaCena = (EditText) findViewById(R.id.real_estate_cena);
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String nazivStr = sharedPref.getString(NEKRETNINE_NAZIV, null);
+        if (nazivStr != null) {
+            nekretninaNaziv.setText(nazivStr);
+        }
+
+        String opisStr = sharedPref.getString(NEKRETNINE_OPIS, null);
+        if (opisStr != null) {
+            nekretninaOpis.setText(opisStr);
+        }
+
+        String adresaStr = sharedPref.getString(NEKRETNINE_ADRESA, null);
+        if (adresaStr != null) {
+            nekretninaAdresa.setText(adresaStr);
+        }
+
+        String brTelefonaStr = sharedPref.getString(NEKRETNINE_BROJ_TELEFONA, null);
+        if (brTelefonaStr != null) {
+            nekretninaBrojTelefona.setText(brTelefonaStr);
+        }
+
+        String kvadraturaStr = sharedPref.getString(NEKRETNINE_KVADRATURA, null);
+        if (kvadraturaStr != null) {
+            nekretninaKvadratura.setText(kvadraturaStr);
+        }
+
+        String brojSobaStr = sharedPref.getString(NEKRETNINE_BROJ_SOBA, null);
+        if (brojSobaStr != null) {
+            nekretninaBrojSoba.setText(brojSobaStr);
+        }
+
+        String cenaStr = sharedPref.getString(NEKRETNINE_CENA, null);
+        if (cenaStr != null) {
+            nekretninaCena.setText(cenaStr);
+        }
+
 
         if (getIntent().getExtras() != null) {
             //! We are performing update action
@@ -95,21 +161,32 @@ public class RealEstateActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            EditText nekretninaNaziv = (EditText) findViewById(R.id.real_estate_naziv);
-            nekretninaNaziv.setText(nekretnina.getmNaziv());
-            EditText nekretninaOpis = (EditText) findViewById(R.id.real_estate_opis);
-            nekretninaOpis.setText(nekretnina.getmOpis());
-            EditText nekretninaAdresa = (EditText) findViewById(R.id.real_estate_adresa);
-            nekretninaAdresa.setText(nekretnina.getmAdresa());
-            EditText nekretninaBrojTelefona = (EditText) findViewById(
-                    R.id.real_estate_broj_telefona);
-            nekretninaBrojTelefona.setText(nekretnina.getmBrojTelefona());
-            EditText nekretninaKvadratura = (EditText) findViewById(R.id.real_estate_kvadratura);
-            nekretninaKvadratura.setText(nekretnina.getmKvadratura());
-            EditText nekretninaBrojSoba = (EditText) findViewById(R.id.real_estate_broj_soba);
-            nekretninaBrojSoba.setText(nekretnina.getmBrojSoba());
-            EditText nekretninaCena = (EditText) findViewById(R.id.real_estate_cena);
-            nekretninaCena.setText(nekretnina.getmCena());
+            //! Use value from database instead from previous dialog
+            if (nazivStr == null) {
+                nekretninaNaziv.setText(nekretnina.getmNaziv());
+            }
+
+            if (opisStr == null) {
+                nekretninaOpis.setText(nekretnina.getmOpis());
+            }
+
+            if (adresaStr == null) {
+                nekretninaAdresa.setText(nekretnina.getmAdresa());
+            }
+
+            if (brTelefonaStr == null) {
+                nekretninaBrojTelefona.setText(nekretnina.getmBrojTelefona());
+            }
+
+            if (kvadraturaStr == null) {
+                nekretninaKvadratura.setText(nekretnina.getmKvadratura());
+            }
+            if (brojSobaStr == null) {
+                nekretninaBrojSoba.setText(nekretnina.getmBrojSoba());
+            }
+            if (cenaStr == null) {
+                nekretninaCena.setText(nekretnina.getmCena());
+            }
 
 
             //! Must, must, must!!!
@@ -135,6 +212,29 @@ public class RealEstateActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        EditText nekretninaNaziv = (EditText) findViewById(R.id.real_estate_naziv);
+        EditText nekretninaOpis = (EditText) findViewById(R.id.real_estate_opis);
+        EditText nekretninaAdresa = (EditText) findViewById(R.id.real_estate_adresa);
+        EditText nekretninaBrojTelefona = (EditText) findViewById(R.id.real_estate_broj_telefona);
+        EditText nekretninaKvadratura = (EditText) findViewById(R.id.real_estate_kvadratura);
+        EditText nekretninaBrojSoba = (EditText) findViewById(R.id.real_estate_broj_soba);
+        EditText nekretninaCena = (EditText) findViewById(R.id.real_estate_cena);
+
+        SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+        editor.putString(NEKRETNINE_NAZIV, nekretninaNaziv.getText().toString());
+        editor.putString(NEKRETNINE_OPIS, nekretninaOpis.getText().toString());
+        editor.putString(NEKRETNINE_ADRESA, nekretninaAdresa.getText().toString());
+        editor.putString(NEKRETNINE_BROJ_TELEFONA, nekretninaBrojTelefona.getText().toString());
+        editor.putString(NEKRETNINE_KVADRATURA, nekretninaKvadratura.getText().toString());
+        editor.putString(NEKRETNINE_BROJ_SOBA, nekretninaBrojSoba.getText().toString());
+        editor.putString(NEKRETNINE_CENA, nekretninaCena.getText().toString());
+        editor.commit();
     }
 
     public void onClickOK(View v) {
@@ -197,8 +297,10 @@ public class RealEstateActivity extends AppCompatActivity {
             }
         } else {
 //Ovo je edit nekretnina
+            Integer nekretninaNo = (Integer) getIntent().getExtras().get(EXTRA_NO);
 
             RealEstate realEstateDB = new RealEstate();
+            realEstateDB.setmId(nekretninaNo);
             realEstateDB.setmNaziv(nekretninaNaziv.getText().toString());
             realEstateDB.setmOpis(nekretninaOpis.getText().toString());
             realEstateDB.setmAdresa(nekretninaAdresa.getText().toString());

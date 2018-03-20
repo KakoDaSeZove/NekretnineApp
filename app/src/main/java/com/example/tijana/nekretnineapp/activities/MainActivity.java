@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_add:
-//
+
                 Intent intent = new Intent(MainActivity.this,
                         RealEstateActivity.class);
                 startActivity(intent);
@@ -114,6 +114,5 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 }

@@ -1,7 +1,11 @@
 package com.example.tijana.nekretnineapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -30,6 +34,9 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -84,17 +91,56 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this,images));
+        gridview.setAdapter(new ImageAdapter(this, images));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
-                    int position, long id) {
+                                    int position, long id) {
                 Toast.makeText(getApplicationContext(), "" + position,
                         Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //! Add
+        getMenuInflater().inflate(R.menu.action_bar_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+
+                Intent intent = new Intent(DetailActivity.this,
+                        RealEstateActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_NO, nekretnina.getmId());
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+            case R.id.action_delete:
+
+                int nekretninaNo = (Integer) getIntent().getExtras().get(EXTRA_NO);
+                DataBaseHelper helper = new DataBaseHelper(this);
+
+                Dao<RealEstate, Integer> nekretninaDao = null;
+                try {
+                    nekretninaDao = helper.getRealEstateDao();
+                    nekretninaDao.deleteById(nekretninaNo);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                finish();
+                return true;
+        }
+
+    }
 }
